@@ -1,17 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import JournalEntry, MembershipEntry, JOURNAL_NAME_CHOICES, MEMBERSHIP_NAME_CHOICES, JournalEntryForm, MembershipEntryForm
-# from .forms import JournalForm
+from .models import JournalEntry, MembershipEntry, JOURNAL_NAME_CHOICES, MEMBERSHIP_NAME_CHOICES
+from .forms import JournalEntryForm, MembershipEntryForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
+@login_required
 def subsmems(request):
     all_journal_entries = JournalEntry.objects.all()
     # all_membership_entries = MembershipEntry.objects.all()
-    # all_journal_names = [x[1] for x in JOURNAL_NAME_CHOICES]
-    # all_membership_names = [x[1] for x in MEMBERSHIP_NAME_CHOICES]
     form = JournalEntryForm()
     context = {
         'all_journal_entries': all_journal_entries,
+        'current_user_name': request.user.username,
         # 'all_membership_entries': all_membership_entries,
         'form': form,
     }
@@ -20,8 +23,21 @@ def subsmems(request):
         context['form'] = JournalEntryForm(request.POST)
         if context['form'].is_valid:
             context['form'].save()
-            return render(request, './subs/subsmems.html', context) 
+            return render(request, 'subsmems.html', context) 
 
     else:
-        return render(request, './subs/subsmems.html', context)
+        return render(request, 'subsmems.html', context)
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('subsmems')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})

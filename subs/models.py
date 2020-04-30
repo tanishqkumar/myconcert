@@ -3,18 +3,18 @@ from datetime import date
 from django import forms
 
 JOURNAL_NAME_CHOICES = [
-    ('New England Journal of Medicine', 'New England Journal of Medicine'),
-    ('Journal of Vascular Surgery'),
+    ('NEJM', 'New England Journal of Medicine'),
+    ('JVS', 'Journal of Vascular Surgery'),
 ]
 
 MEMBERSHIP_NAME_CHOICES = [
-    ('American College of Surgeons'),
-    ('American Medical Association'),
+    ('ACS', 'American College of Surgeons'),
+    ('AMA', 'American Medical Association'),
 ]
 
 CREDIT_FOR_CHOICES = [
-    ('American Board of Surgery'),
-    ('American Board of Medical Specialties'),
+    ('ABS', 'American Board of Surgery'),
+    ('ABMS', 'American Board of Medical Specialties'),
 ]
 
 # Create your models here.
@@ -60,16 +60,6 @@ class JournalEntry(models.Model):
     def __str__(self):
         return self.name
 
-class JournalEntryForm(forms.ModelForm):
-    """Form definition for JournalEntry."""
-
-    class Meta:
-        """Meta definition for JournalEntryform."""
-
-        model = JournalEntry
-        fields = ('name', 'renewal_date', 'sub_cost')
-
-
 class MembershipEntry(models.Model):
     name = models.CharField(
         null=False,
@@ -111,12 +101,3 @@ class MembershipEntry(models.Model):
 
     def __str__(self): return self.name
 
-
-class MembershipEntryForm(forms.ModelForm):
-    """Form definition for MembershipEntry."""
-
-    class Meta:
-        """Meta definition for MembershipEntryform."""
-
-        model = MembershipEntry
-        fields = ('name', 'renewal_date', 'sub_cost')
