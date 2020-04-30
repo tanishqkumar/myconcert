@@ -9,11 +9,11 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 @login_required
 def subsmems(request):
-    all_journal_entries = JournalEntry.objects.all()
+    user_journal_entries = JournalEntry.objects.filter(user__username=request.user.username)
     # all_membership_entries = MembershipEntry.objects.all()
     form = JournalEntryForm()
     context = {
-        'all_journal_entries': all_journal_entries,
+        'user_journal_entries': user_journal_entries,
         'current_user_name': request.user.username,
         # 'all_membership_entries': all_membership_entries,
         'form': form,
@@ -22,7 +22,9 @@ def subsmems(request):
         # create, check, process data from form, redirect
         context['form'] = JournalEntryForm(request.POST)
         if context['form'].is_valid:
-            context['form'].save()
+            journalEntry = context['form'].save(commit=False)
+            journalEntry.user = request.user
+            journalEntry.save()
             return render(request, 'subsmems.html', context) 
 
     else:

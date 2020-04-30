@@ -32,17 +32,17 @@
         <div style="width: 100%; padding-top: 50px;">
             <ul>
                 <h4>
-                    All Journal Entries:
+                    Your Journals:
                 </h4>
-                {% if all_journal_entries %}
-                {% for entry in all_journal_entries %}
+                {% if user_journal_entries %}
+                {% for entry in user_journal_entries %}
                 
                 <div class="jumbotron" style="
                     width: 95%; 
                     margin-top: 10px; 
                     margin-right: 10px;"
                     >
-                    <h1 class="display-6">{{ entry.name }}</h1>
+                    <h1 class="display-6">{{ entry.get_name_display }}</h1>
                     <p class="lead">Subscription Cost: {{ entry.sub_cost }}</p>
                     <hr class="my-4">
                     <p>Due for renewal on {{ entry.renewal_date }}</p>

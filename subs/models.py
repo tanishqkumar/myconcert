@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import date
 from django import forms
+from django.contrib.auth.models import User
 
 JOURNAL_NAME_CHOICES = [
     ('NEJM', 'New England Journal of Medicine'),
@@ -22,7 +23,15 @@ class JournalEntry(models.Model):
     name = models.CharField(
         null=False,
         choices=JOURNAL_NAME_CHOICES,
-        max_length=256)
+        max_length=256,
+        )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="journals",
+        null=True,
+        )
 
     renewal_date = models.DateField(
         verbose_name="Date of Renewal", 
@@ -64,7 +73,15 @@ class MembershipEntry(models.Model):
     name = models.CharField(
         null=False,
         choices=MEMBERSHIP_NAME_CHOICES,
-        max_length=256)
+        max_length=256,
+        )
+    
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="memberships",
+        null=True,
+    )
 
     renewal_date = models.DateField(
         verbose_name="Date of Renewal",

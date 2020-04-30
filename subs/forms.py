@@ -8,7 +8,7 @@ class JournalEntryForm(forms.ModelForm):
         """Meta definition for JournalEntryform."""
 
         model = JournalEntry
-        fields = ('name', 'renewal_date', 'sub_cost')
+        fields = ('name','renewal_date', 'sub_cost')
 
 class MembershipEntryForm(forms.ModelForm):
     """Form definition for MembershipEntry."""
