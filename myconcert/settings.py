@@ -121,5 +121,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_URL = 'accounts/login'
 LOGOUT_URL = 'accounts/logout'
-LOGOUT_REDIRECT_URL = 'http://localhost:8000/accounts/login'
+LOGOUT_REDIRECT_URL = 'http://localhost:8000/login'
 LOGIN_REDIRECT_URL = '/'

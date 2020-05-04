@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import JournalEntry, MembershipEntry, JOURNAL_NAME_CHOICES, MEMBERSHIP_NAME_CHOICES
-from .forms import MembershipEntryForm, JournalEntryForm
+from .forms import MembershipEntryForm, JournalEntryForm, UserSignupForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
@@ -32,7 +32,7 @@ def subsmems(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserSignupForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -41,7 +41,7 @@ def signup(request):
             login(request, user)
             return redirect('subsmems')
     else:
-        form = UserCreationForm()
+        form = UserSignupForm()
     return render(request, 'signup.html', {'form': form})
 
 def deleteJournalEntry(request):
