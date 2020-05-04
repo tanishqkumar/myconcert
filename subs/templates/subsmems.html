@@ -24,16 +24,13 @@
         <div style="width: 20%; float: right;">
             <h5>You are logged in as: {{ current_user_name }}</h5>
             <a href="{% url 'logout' %}">
-                <input type="submit" value="Logout">
+                <input type="submit" value="Logout" class="btn btn-primary">
             </a>
         </div>
 
 
-        <div style="width: 100%; padding-top: 50px;">
+        <div style="width: 100%; padding-top: 80px;">
             <ul>
-                <h4>
-                    Your Journals:
-                </h4>
                 {% if user_journal_entries %}
                 {% for entry in user_journal_entries %}
                 
@@ -46,6 +43,17 @@
                     <p class="lead">Subscription Cost: {{ entry.sub_cost }}</p>
                     <hr class="my-4">
                     <p>Due for renewal on {{ entry.renewal_date }}</p>
+                    <form action="{% url 'deleteJournalEntry' %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" 
+                        value="{{ entry.id }}" 
+                        name="id"
+                        class="btn btn-primary"
+                        placeholder="Delete Entry"
+                        >
+                            Delete Entry
+                        </button>
+                    </form>
                 </div>
                 {% endfor %}
                 {% endif %}

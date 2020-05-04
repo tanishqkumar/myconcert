@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import JournalEntry, MembershipEntry, JOURNAL_NAME_CHOICES, MEMBERSHIP_NAME_CHOICES
-from .forms import JournalEntryForm, MembershipEntryForm
+from .forms import MembershipEntryForm, JournalEntryForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
@@ -43,3 +43,9 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+def deleteJournalEntry(request):
+    entry_to_delete = JournalEntry.objects.filter(
+        pk=request.POST.get('id'))
+    entry_to_delete.delete()    
+    return redirect('subsmems')

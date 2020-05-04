@@ -1,5 +1,6 @@
 from django import forms
 from .models import JournalEntry, MembershipEntry
+from django.contrib.auth.forms import AuthenticationForm
 
 class JournalEntryForm(forms.ModelForm):
     """Form definition for JournalEntry."""
@@ -18,4 +19,22 @@ class MembershipEntryForm(forms.ModelForm):
 
         model = MembershipEntry
         fields = ('name', 'renewal_date', 'sub_cost')
+
+class UserLoginForm(AuthenticationForm):
+
+    def __init__(self, *args, **kwargs):
+        super(UserLoginForm, self).__init__(*args, **kwargs)
+
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'input100', 
+            'placeholder': 'Username',
+       }
+    ))
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={ 
+            'class': 'input100',
+            'placeholder': 'Password',
+        }
+    ))
 
