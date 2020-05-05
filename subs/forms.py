@@ -11,6 +11,19 @@ class JournalEntryForm(forms.ModelForm):
 
         model = JournalEntry
         fields = ('name','renewal_date', 'sub_cost')
+        widgets = {
+            'renewal_date': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 40%; display: inline-block;',
+                'placeholder': 'dd/mm/yyyy'
+                }),
+            'sub_cost': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 40%; display: inline-block',
+                'placeholder': 'eg. 149.99'
+            }),
+        }
+
 
 class MembershipEntryForm(forms.ModelForm):
     """Form definition for MembershipEntry."""
@@ -20,6 +33,18 @@ class MembershipEntryForm(forms.ModelForm):
 
         model = MembershipEntry
         fields = ('name', 'renewal_date', 'sub_cost')
+        widgets = {
+            'renewal_date': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 40%; display: inline-block;',
+                'placeholder': 'dd/mm/yyyy'
+            }),
+            'sub_cost': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 40%; display: inline-block',
+                'placeholder': 'eg. 149.99'
+            }),
+        }
 
 class UserLoginForm(AuthenticationForm):
 

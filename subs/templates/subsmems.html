@@ -1,67 +1,219 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
     <title>MyConcert</title>
-</head>
+    <style>
+      #test {
+        -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 2s; /* Firefox < 16 */
+        -ms-animation: fadein 2s; /* Internet Explorer */
+        -o-animation: fadein 2s; /* Opera < 12.1 */
+        animation: fadein 2s;
+      }
 
-<body>
-    <!-- form where user can create new JournalEntry objects by inputting:
-    name, renewal date, subscription cost-->
+      @keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Firefox < 16 */
+      @-moz-keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Safari, Chrome and Opera > 12.1 */
+      @-webkit-keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Internet Explorer */
+      @-ms-keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Opera < 12.1 */
+      @-o-keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
     <div>
-
-        <div style="width: 50%; text-align: center;">
-            <form action="{% url 'subsmems' %}" method="post" style="text-align: center;">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Submit" class="btn btn-primary">
-            </form>
+      <div style="padding-bottom: 25px; width: 100%;">
+        <div style="width: 10%; padding-top: 35px; float: right;">
+          <!-- Welcome to the future of medicine, {{ current_user_name }}  -->
+          <a href="{% url 'logout' %}">
+            <input type="submit" value="Logout" class="btn btn-primary" />
+          </a>
         </div>
 
-        <div style="width: 20%; float: right;">
-            <h5>You are logged in as: {{ current_user_name }}</h5>
-            <a href="{% url 'logout' %}">
-                <input type="submit" value="Logout" class="btn btn-primary">
-            </a>
+        <div style="padding: 20px; float: left;" class="display-4" id="test">
+          Welcome to the future of medicine, {{ current_user_name }}
         </div>
-
-
-        <div style="width: 100%; padding-top: 80px;">
-            <ul>
-                {% if user_journal_entries %}
-                {% for entry in user_journal_entries %}
-                
-                <div class="jumbotron" style="
-                    width: 95%; 
-                    margin-top: 10px; 
-                    margin-right: 10px;"
-                    >
-                    <h1 class="display-6">{{ entry.get_name_display }}</h1>
-                    <p class="lead">Subscription Cost: {{ entry.sub_cost }}</p>
-                    <hr class="my-4">
-                    <p>Due for renewal on {{ entry.renewal_date }}</p>
-                    <form action="{% url 'deleteJournalEntry' %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" 
-                        value="{{ entry.id }}" 
-                        name="id"
-                        class="btn btn-primary"
-                        placeholder="Delete Entry"
-                        >
-                            Delete Entry
-                        </button>
-                    </form>
-                </div>
-                {% endfor %}
-                {% endif %}
-            </ul>
-        </div>
-
-
+      </div>
     </div>
-</body>
 
+    <div>
+      <div>
+        <div
+          style="width: 50%; padding-left: 50px; float: left; display: block;"
+        >
+          <div
+            style="
+              width: 90%;
+              border: 1px solid;
+              border-radius: 2.5%/5%;
+              padding: 30px;
+            "
+          >
+            <form
+              action="{% url 'subsmems' %}"
+              method="post"
+              style="text-align: center;"
+            >
+              {% csrf_token %}
+              <div class="form-group">
+                {{ journal_form.as_p }}
+              </div>
+              <input
+                type="submit"
+                name="journalForm"
+                value="Add Journal"
+                class="btn btn-primary"
+              />
+            </form>
+          </div>
+        </div>
+
+        <div
+          style="width: 50%; padding-left: 50px; float: right; display: block;"
+        >
+          <div
+            style="
+              width: 90%;
+              border: 1px solid;
+              border-radius: 2.5%/5%;
+              padding: 30px;
+            "
+          >
+            <form
+              action="{% url 'subsmems' %}"
+              method="post"
+              style="text-align: center;"
+            >
+              {% csrf_token %}
+              <div class="form-group">
+                {{ membership_form.as_p }}
+              </div>
+              <input
+                type="submit"
+                name="membershipForm"
+                value="Add Membership"
+                class="btn btn-primary"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div style="width: 100%; padding-top: 30px; display: inline-block;">
+        <ul>
+          {% if user_journal_entries %} {% for entry in user_journal_entries %}
+
+          <div
+            class="jumbotron"
+            style="
+              width: 95%;
+              padding: 20px 20px 20px 20px;
+              height: 18rem;
+              border-radius: 1%/5%;
+            "
+          >
+            <h1 class="display-6">{{ entry.get_name_display }}</h1>
+            <p class="lead">Subscription Cost: ${{ entry.sub_cost }}</p>
+            <hr class="my-4" />
+            <p>Due for renewal on {{ entry.renewal_date }}</p>
+            <form action="{% url 'deleteJournalEntry' %}" method="POST">
+              {% csrf_token %}
+              <button
+                type="submit"
+                value="{{ entry.id }}"
+                name="id"
+                class="btn btn-primary"
+                placeholder="Delete Entry"
+              >
+                Delete Entry
+              </button>
+            </form>
+          </div>
+          {% endfor %} {% endif %}
+
+          {% if user_membership_entries %} {% for entry in user_membership_entries %}
+          <div
+            class="jumbotron"
+            style="
+              width: 95%;
+              padding: 20px 20px 20px 20px;
+              height: 18rem;
+              border-radius: 1%/5%;
+            "
+          >
+            <h1 class="display-6">{{ entry.get_name_display }}</h1>
+            <p class="lead">Subscription Cost: ${{ entry.sub_cost }}</p>
+            <hr class="my-4" />
+            <p>Due for renewal on {{ entry.renewal_date }}</p>
+
+            <form action="{% url 'deleteMembershipEntry' %}" method="POST">
+              {% csrf_token %}
+              <button
+                type="submit"
+                value="{{ entry.id }}"
+                name="id"
+                class="btn btn-primary"
+                placeholder="Delete Entry"
+              >
+                Delete Entry
+              </button>
+            </form>
+
+
+          </div>
+          {% endfor %} {% endif %}
+
+        </ul>
+      </div>
+    </div>
+  </body>
 </html>
