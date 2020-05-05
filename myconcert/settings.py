@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'l-0e%82(q35dk+uqk22=!jyedg*365-3=qb4cguh0u2(#e=5t$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['myconcert.herokuapp.com', '127.0.0.1']
 
@@ -122,7 +122,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-LOGIN_URL = 'accounts/login'
+LOGIN_URL = 'login'
 LOGOUT_URL = 'accounts/logout'
 LOGOUT_REDIRECT_URL = 'http://localhost:8000/login'
 LOGIN_REDIRECT_URL = '/'
