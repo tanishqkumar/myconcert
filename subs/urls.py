@@ -1,7 +1,7 @@
 from .forms import UserLoginForm
 from django.urls import path, include
 from django.contrib.auth import views
-from .views import subsmems, signup, deleteJournalEntry, deleteMembershipEntry
+from .views import subsmems, signup, deleteJournalEntry, deleteMembershipEntry, tablepage
 
 urlpatterns = [
     path('', subsmems, name='subsmems'),
@@ -15,7 +15,8 @@ urlpatterns = [
         name='login'
     ), 
     path('deleteJournalEntry', deleteJournalEntry, name='deleteJournalEntry'),
-    path('deleteMembershipEntry', deleteMembershipEntry, name='deleteMembershipEntry')
+    path('deleteMembershipEntry', deleteMembershipEntry, name='deleteMembershipEntry'), 
+    path('tablepage', tablepage, name='tablepage'), 
 ]
 
 

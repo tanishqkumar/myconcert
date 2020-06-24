@@ -71,3 +71,8 @@ def deleteMembershipEntry(request):
         pk=request.POST.get('id'))
     entry_to_delete.delete()
     return redirect('subsmems')
+
+
+@login_required
+def tablepage(request):
+    return render(request, 'tablepage.html') 

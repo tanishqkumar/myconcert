@@ -1,0 +1,144 @@
+{% load static %}
+<head>
+	<title>Details</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{% static 'subs/table/images/icons/favicon.ico' %}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/table/vendor/bootstrap/css/bootstrap.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/table/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/table/vendor/animate/animate.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/table/vendor/select2/select2.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/table/vendor/perfect-scrollbar/perfect-scrollbar.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/table/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/table/css/main.css' %}">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-table100">
+			<div class="wrap-table100">
+				<div class="table100 ver1">
+					<div class="table100-firstcol">
+						<table>
+							<thead>
+								<tr class="row100 head">
+									<th class="cell100 column1">Name</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="row100 body">
+									<td class="cell100 column1">New England Journal of Medicine</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">American College of Surgeons</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">New England Journal of Medicine</td>
+								</tr>
+
+								<tr class="row100 body">
+									<td class="cell100 column1">American College of Surgeons</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="wrap-table100-nextcols js-pscroll">
+						<div class="table100-nextcols">
+							<table>
+								<thead>
+									<tr class="row100 head">
+										<th class="cell100 column2">Credit For</th>
+										<th class="cell100 column3">CME Available</th>
+										<th class="cell100 column4">Renewal Date</th>
+										<th class="cell100 column5">Cost</th>
+										<th class="cell100 column6">Type</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="row100 body">
+										<td class="cell100 column2">ABS</td>
+										<td class="cell100 column3">No</td>
+										<td class="cell100 column4">16 Nov 2017</td>
+										<td class="cell100 column5">21.99</td>
+										<td class="cell100 column6">Journal</td>
+									</tr>
+
+									<tr class="row100 body">
+										<td class="cell100 column2">License</td>
+										<td class="cell100 column3">Yes</td>
+										<td class="cell100 column4">30 Nov 2017</td>
+										<td class="cell100 column5">16.49</td>
+										<td class="cell100 column6">Membership</td>
+									</tr>
+
+									<tr class="row100 body">
+										<td class="cell100 column2">ABS</td>
+										<td class="cell100 column3">No</td>
+										<td class="cell100 column4">16 Nov 2017</td>
+										<td class="cell100 column5">21.99</td>
+										<td class="cell100 column6">Journal</td>
+									</tr>
+
+									<tr class="row100 body">
+										<td class="cell100 column2">License</td>
+										<td class="cell100 column3">Yes</td>
+										<td class="cell100 column4">30 Nov 2017</td>
+										<td class="cell100 column5">16.49</td>
+										<td class="cell100 column6">Membership</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<!--===============================================================================================-->	
+	<script src="{% static 'subs/table/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'subs/table/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'subs/table/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'subs/table/vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'subs/table/vendor/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			var ps = new PerfectScrollbar(this);
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+
+			$(this).on('ps-x-reach-start', function(){
+				$(this).parent().find('.table100-firstcol').removeClass('shadow-table100-firstcol');
+			});
+
+			$(this).on('ps-scroll-x', function(){
+				$(this).parent().find('.table100-firstcol').addClass('shadow-table100-firstcol');
+			});
+
+		});
+
+		
+		
+		
+	</script>
+<!--===============================================================================================-->
+	<script src="{% static 'subs/table/js/main.js' %}"></script>
+
+</body>
