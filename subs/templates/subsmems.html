@@ -79,6 +79,12 @@
           </a>
         </div>
 
+        <div style="width: 10%; padding-top: 35px; float: right;">
+          <a href="{% url 'tablepage' %}">
+            <input type="submit" value="Tables" class="btn btn-primary" />
+          </a>
+        </div>
+
         <div style="padding: 20px; float: left;" class="display-4" id="test">
           Welcome to the future of medicine, {{ current_user_name }}
         </div>
@@ -178,9 +184,8 @@
               </button>
             </form>
           </div>
-          {% endfor %} {% endif %}
-
-          {% if user_membership_entries %} {% for entry in user_membership_entries %}
+          {% endfor %} {% endif %} {% if user_membership_entries %} 
+          {% for entry in user_membership_entries %}
           <div
             class="jumbotron"
             style="
@@ -207,11 +212,8 @@
                 Delete Entry
               </button>
             </form>
-
-
           </div>
           {% endfor %} {% endif %}
-
         </ul>
       </div>
     </div>
