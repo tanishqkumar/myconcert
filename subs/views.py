@@ -31,9 +31,17 @@ def boardstate(request):
         e.save()
         # post back all the entries, incl. the new one, so they can be the instance of the form
         context['board_entries'] = boardEntry.objects.all()
+        if len(boardEntry.objects.all()) == 0:
+            context['is_graph'] = False
+        else:
+            context['is_graph'] = True
         return render(request, 'board.html', context)
     else: 
         context['board_entries'] = boardEntry.objects.all()
+        if len(boardEntry.objects.all()) == 0:
+            context['is_graph'] = False
+        else:     
+            context['is_graph'] = True
         return render(request, 'board.html', context)
     return render(request, 'state.html')
 

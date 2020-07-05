@@ -106,7 +106,7 @@
                   </form>
                 </tbody>
               </table>
-
+              {% if is_graph %}
               <div id="container" style="width: 50%;">
                 <canvas id="chart" data-url="{% url 'chart' %}" style="
                 margin-top: 30px; 
@@ -163,6 +163,7 @@
                         });
               </script>
               <br>
+              {% endif %}
             </div>
           </div>
         </div>
