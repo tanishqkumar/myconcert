@@ -17,6 +17,8 @@ urlpatterns = [
     path('deleteJournalEntry', deleteJournalEntry, name='deleteJournalEntry'),
     path('deleteMembershipEntry', deleteMembershipEntry, name='deleteMembershipEntry'), 
     path('table', tablepage, name='tablepage'), 
+    path('boardstate', boardstate, name='boardstate'), 
+    path('chart', chart, name='chart'), 
 ]
 
 

@@ -4,22 +4,22 @@
     <title>Signup</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="{% static 'subs/images/icons/favicon.ico' %}" />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'subs/vendor/bootstrap/css/bootstrap.min.css' %}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'subs/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'subs/vendor/animate/animate.css' %}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'subs/vendor/css-hamburgers/hamburgers.min.css' %}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'subs/vendor/select2/select2.min.css' %}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{% static 'subs/css/util.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'subs/css/main.css' %}">
-    <!--===============================================================================================-->
+<!--===============================================================================================-->	
+    <link rel="icon" type="image/png" href="{% static 'subs/login/images/icons/favicon.ico' %}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/login/vendor/bootstrap/css/bootstrap.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/login/vendor/animate/animate.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/login/vendor/css-hamburgers/hamburgers.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/login/vendor/select2/select2.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'subs/login/css/util.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'subs/login/css/main.css' %}">
+<!--===============================================================================================-->
 </head>
 
 <body>
@@ -27,7 +27,7 @@
         <div class="container-login100">
             <div class="wrap-login100">
                 <div class="login100-pic js-tilt" data-tilt>
-                    <img src="{% static 'subs/images/img-01.png' %}" alt="IMG">
+                    <img src="{% static 'subs/login/images/img-01.png' %}" alt="IMG">
                 </div>
 
                 <form class="login100-form" method="post" action="{% url 'signup' %}">
@@ -71,19 +71,19 @@
         </div>
     </div>
 
-    <!--===============================================================================================-->
-    <script src="{% static 'subs/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
-    <!--===============================================================================================-->
-    <script src="{% static 'subs/vendor/bootstrap/js/popper.js' %}"></script>
-    <script src="{% static 'subs/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-    <!--===============================================================================================-->
-    <script src="{% static 'subs/vendor/select2/select2.min.js' %}"></script>
-    <!--===============================================================================================-->
-    <script src="{% static 'subs/vendor/tilt/tilt.jquery.min.js' %}"></script>
-    <script>
-        $('.js-tilt').tilt({
-            scale: 1.1
-        })
-    </script>
+<!--===============================================================================================-->	
+	<script src="{% static 'subs/login/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'subs/login/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'subs/login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'subs/login/vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'subs/login/vendor/tilt/tilt.jquery.min.js' %}"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
 
 </body>

@@ -1,12 +1,44 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import JournalEntry, MembershipEntry
+from .models import *
 from .forms import MembershipEntryForm, JournalEntryForm, UserSignupForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.http import JsonResponse
+import random
 
 # Create your views here.
+@login_required()
+def chart(request):
+    # ABS: 30, where ABS is label and 30 is data
+    user_boardstate_entries = boardEntry.objects.filter(user=request.user)
+    return JsonResponse(data={
+        'labels': [e.name for e in user_boardstate_entries],
+        'data': [e.num_cme_credits for e in user_boardstate_entries],
+    })
+
+@login_required()
+def boardstate(request): 
+    context = {}
+    context['dict'] = BOARDSTATE_CREDITS
+    if request.method == 'POST':
+        # take posted board name as dropdown option
+        name = request.POST.get('name')
+        creds = BOARDSTATE_CREDITS[name]
+        # generate randint to go with that entry
+        e = boardEntry(name=name, num_cme_credits=creds, user=request.user)
+        e.save()
+        # post back all the entries, incl. the new one, so they can be the instance of the form
+        context['board_entries'] = boardEntry.objects.all()
+        return render(request, 'board.html', context)
+    else: 
+        context['board_entries'] = boardEntry.objects.all()
+        return render(request, 'board.html', context)
+    return render(request, 'state.html')
+
+
+
 @login_required
 def subsmems(request):
     user_journal_entries = JournalEntry.objects.filter(user__username=request.user.username)

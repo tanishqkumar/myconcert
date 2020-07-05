@@ -80,8 +80,8 @@
         </div>
 
         <div style="width: 10%; padding-top: 35px; float: right;">
-          <a href="{% url 'tablepage' %}">
-            <input type="submit" value="Tables" class="btn btn-primary" />
+          <a href="{% url 'boardstate' %}">
+            <input type="submit" value="Board & State" class="btn btn-primary" />
           </a>
         </div>
 
@@ -215,6 +215,9 @@
           </div>
           {% endfor %} {% endif %}
         </ul>
+      </div>
+      <div name="graph">
+        graph gets data and goes here
       </div>
     </div>
   </body>

@@ -18,6 +18,13 @@ CREDIT_FOR_CHOICES = [
     ('ABMS', 'American Board of Medical Specialties'),
 ]
 
+BOARDSTATE_CREDITS = {
+    'ABS': 30,
+    'AMBS': 25,
+    'NBPAS': 20,
+    'NY': 5, 
+}
+
 # Create your models here.
 class JournalEntry(models.Model):
     name = models.CharField(
@@ -118,3 +125,19 @@ class MembershipEntry(models.Model):
 
     def __str__(self): return self.name
 
+class boardEntry(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="boards",
+        null=True,
+    )
+
+    name = models.CharField(
+        null=True,
+        max_length=1024,
+        )
+
+    num_cme_credits = models.IntegerField(default=10)
+
+    def __str__(self): return self.name
