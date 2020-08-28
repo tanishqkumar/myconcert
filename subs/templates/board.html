@@ -75,14 +75,38 @@
                   <tr class="row100 head">
                     <th class="cell100 column1">Name</th>
                     <th class="cell100 column2">CME Credits</th>
+                    <th class="cell100 column3">cat-1</th>
+                    <th class="cell100 column4">self</th>
+                    <th class="cell100 column5">cat-2</th>
                   </tr>
                 </thead>
                 <tbody>
                   <!-- show all existing entries here before the empty one below -->
-                  {% for entry in board_entries %}
+                  {% for k, v in board_entries_w_info.items %}
                   <tr class="row100 body">
-                    <td class="cell100 column1">{{ entry.name }}</td>
-                    <td class="cell100 column2">{{ entry.num_cme_credits }}</td>
+                    <td class="cell100 column1">
+                      {{k}}
+                      <form method="POST" action="{% url 'del_board_entry' %}">
+                        {% csrf_token %}
+                        <button
+                          type="submit"
+                          name="entry_name"
+                          value="{{ k }}"
+                          class="btn btn-primary"
+                          style="
+                            display: inline;
+                            margin-left: 20px;
+                            line-height: 0.5;
+                          "
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </td>
+                    <td class="cell100 column2">{{v.total_cme_req}}</td>
+                    <td class="cell100 column3">{{v.cat_1_req}}</td>
+                    <td class="cell100 column4">{{v.self_req}}</td>
+                    <td class="cell100 column5">{{v.cat_2_req}}</td>
                   </tr>
                   {% endfor %}
 
@@ -91,78 +115,90 @@
                     <tr class="row100 body">
                       <td class="cell100 column1">
                         <select name="name">
-                          {% for k in dict %}
+                          {% for k in BOARD_INFO %}
                           <option>{{ k }}</option>
                           {% endfor %}
-                          <input
-                            type="submit"
-                            value="Add"
-                            class="btn btn-primary"
-                            style="margin-left: 20px; line-height: 0.5;"
-                          />
                         </select>
+                        <select name="timeline">
+                          <option value="cycle_1">Cycle 1</option>
+                          <option value="cycle_2">Cycle 2</option>
+                          <option value="annual">Annual</option>
+                        </select>
+                        <input
+                          type="submit"
+                          value="Add"
+                          class="btn btn-primary"
+                          style="margin-left: 20px; line-height: 0.5"
+                        />
                       </td>
                     </tr>
                   </form>
                 </tbody>
               </table>
-              {% if is_graph %}
-              <div id="container" style="width: 50%;">
-                <canvas id="chart" data-url="{% url 'chart' %}" style="
-                margin-top: 30px; 
-                margin-left: 50%;"></canvas>
-              </div>
-
               <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
               <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-              <script>
-                        $(function () {
-                          var $chart = $("#chart");
-                          $.ajax({
-                            url: $chart.data("url"),
-                            success: function (data) {
-                              var ctx = $chart[0].getContext("2d");
+              {% if not True %}
 
-                              new Chart(ctx, {
-                                type: "doughnut",
-                                data: {
-                                  labels: data.labels,
-                                  datasets: [
-                                    {
-                                              backgroundColor: [
-                                              "#f38b4a",
-                                              "#56d798",
-                                              "#ff8397",
-                                              "#6970d5",
-                                            ],
-                                            hoverBackgroundColor: [
-                                              "#f38b4a",
-                                              "#56d798",
-                                              "#ff8397",
-                                              "#6970d5",
-                                            ],
-                                      data: data.data,
-                                    },
-                                  ],
-                                },
-                                options: {
-                                  responsive: true,
-                                  cutoutPercentage: 70,
-                                  // legend: {
-                                  //   position: "left",
-                                  // },
-                                  title: {
-                                    text: 'Your CME, Visualized',
-                                    fontSize: 32,
-                                    display: true,
-                                  },
-                                },
-                              });
+              <div id="container" style="width: 50%">
+                <canvas
+                  class="chart"
+                  data-url="{% url 'chart' %}"
+                  style="margin-top: 30px; margin-left: 50%"
+                ></canvas>
+              </div>
+
+              <script>
+                $(function () {
+                  var $chart = $(".chart");
+                  console.log('url is:', $chart.data("url"))
+                  $.ajax({
+                    url: $chart.data("url"),
+                    success: function (data) {
+                      console.log('yoo')
+                      // console.log(data)
+                      var ctx = $chart[0].getContext("2d");
+
+                      new Chart(ctx, {
+                        type: "doughnut",
+                        data: {
+                          labels: data.labels,
+                          datasets: [
+                            {
+                              backgroundColor: [
+                                "#f38b4a",
+                                "#56d798",
+                                "#ff8397",
+                                "#6970d5",
+                              ],
+                              hoverBackgroundColor: [
+                                "#f38b4a",
+                                "#56d798",
+                                "#ff8397",
+                                "#6970d5",
+                              ],
+                              data: data.data,
                             },
-                          });
-                        });
+                          ],
+                        },
+                        options: {
+                          responsive: true,
+                          cutoutPercentage: 70,
+                          // legend: {
+                          //   position: "left",
+                          // },
+                          title: {
+                            text: "Your CME, Visualized",
+                            fontSize: 32,
+                            display: true,
+                          },
+                        },
+                      });
+                    },
+                  });
+                });
               </script>
-              <br>
+
+              <br />
               {% endif %}
             </div>
           </div>

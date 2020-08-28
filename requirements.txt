@@ -142,7 +142,6 @@ prices==1.0.0
 promise==2.2.1
 prompt-toolkit==3.0.5
 protobuf==3.11.3
-psycopg2==2.8.5
 psycopg2-binary==2.8.4
 ptyprocess==0.6.0
 purl==1.5

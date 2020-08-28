@@ -19,6 +19,7 @@ urlpatterns = [
     path('table', tablepage, name='tablepage'), 
     path('boardstate', boardstate, name='boardstate'), 
     path('chart', chart, name='chart'), 
+    path('del_board_entry', del_board_entry, name='del_board_entry'), 
 ]
 
 
