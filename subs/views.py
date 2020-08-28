@@ -19,30 +19,23 @@ def chart(request):
     board_entries = BoardEntry.objects.filter(user=request.user)
     rows = {}
     row_labels, row_data = [], []
-    for e in board_entries:
-        rows[e.name] = BOARD_INFO[e.name][e.timeline]
-        row_labels = list(rows[e.name].keys())[2:]
-        row_data = list(rows[e.name].values())[2:]
-    # rows = {}
-    # row_labels, row_data = {}, {}
-    # for e in board_entries:
-    #     rows[e.name] = BOARD_INFO[e.name][e.timeline]
-    #     row_labels[e.name] = list(rows[e.name].keys())
-    #     row_data[e.name] = list(rows[e.name].values())
+    for eo in board_entries:
+        row_labels = ['cycle_1_total_cme_req', 'cycle_1_cat_1_req',
+                      'cycle_1_self_req', 'cycle_1_cat_2_req']
+        row_data = [eo.board.cycle_1_total_cme_req, eo.board.cycle_1_cat_1_req,
+                    eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
     print('row labels then data: ', row_labels, row_data)
     return JsonResponse(data={
-        'row_names': [e.name for e in board_entries],
         'labels': row_labels,
         'data': row_data,
     })
-    # {'ABS': dict_keys(['length_years', 'total_cme_req',
-                    #    'cat_1_req', 'self_req', 'cat_2_req'])}
 
 @login_required()
 def del_board_entry(request):
     # ABS: 30, where ABS is label and 30 is data
     # take the entry name and cycle and we'll get the entry associated with that account
-    BoardEntry.objects.filter(user=request.user).filter(name=request.POST['entry_name']).delete()
+    BoardEntry.objects.filter(user=request.user, board__name=request.POST['entry_name']).delete()
+    print('deleted', request.POST['entry_name'])
     return redirect('boardstate')
 
 # get graph working with current setup
@@ -58,18 +51,13 @@ def boardstate(request):
     context = {}
     context['BOARD_INFO'] = BOARD_INFO
     if request.method == 'POST':
-        # take posted board name as dropdown option
         name = request.POST.get('name')
-        timeline = request.POST.get('timeline')
-        # print('timeline', timeline)
-        e = BoardEntry(name=name, timeline=timeline, user=request.user)
+        board = Board.objects.get(name=name)
+        e = BoardEntry(board=board, user=request.user)
         e.save()
         # post back all the entries, incl. the new one, so they can be the instance of the form
         board_entries = BoardEntry.objects.filter(user=request.user)
-        context['board_entries_w_info'] = {}
-        for e in board_entries:
-            context['board_entries_w_info'][e.name] = BOARD_INFO[e.name][e.timeline]
-            print(context['board_entries_w_info'])
+        context['user_board_entries'] = board_entries
         # construct dict with all board entries for this person, and then add k,v within each key
         # that represent the minor info by querying the board_info here on the backend
         if len(BoardEntry.objects.all()) == 0:
@@ -80,23 +68,18 @@ def boardstate(request):
             context['is_graph'] = True
             # print('graph should render')
         return render(request, 'board.html', context)
-
-        context['board_entries_w_info']
     
     else: 
+        print('get req')
+        for x in BoardEntry.objects.all():
+            print(x.board)
         board_entries = BoardEntry.objects.filter(user=request.user)
         context['board_entries_w_info'] = {}
-        for e in board_entries:
-            print('be are', board_entries)
-            context['board_entries_w_info'][e.name] = BOARD_INFO[e.name][e.timeline]
-        # print('bewi is', context['board_entries_w_info'])
+        context['user_board_entries'] = board_entries
         if len(BoardEntry.objects.all()) == 0:
             context['is_graph'] = False
-            # print('graph wont render2')
         else:     
-            # context['is_graph'] = False
             context['is_graph'] = True
-            # print('graph should render2')
         return render(request, 'board.html', context)
     return render(request, 'state.html')
 

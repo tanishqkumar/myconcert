@@ -82,16 +82,16 @@
                 </thead>
                 <tbody>
                   <!-- show all existing entries here before the empty one below -->
-                  {% for k, v in board_entries_w_info.items %}
+                  {% for eo in user_board_entries %}
                   <tr class="row100 body">
                     <td class="cell100 column1">
-                      {{k}}
+                      {{ eo.board.name }}
                       <form method="POST" action="{% url 'del_board_entry' %}">
                         {% csrf_token %}
                         <button
                           type="submit"
                           name="entry_name"
-                          value="{{ k }}"
+                          value="{{ eo.board.name }}"
                           class="btn btn-primary"
                           style="
                             display: inline;
@@ -103,10 +103,10 @@
                         </button>
                       </form>
                     </td>
-                    <td class="cell100 column2">{{v.total_cme_req}}</td>
-                    <td class="cell100 column3">{{v.cat_1_req}}</td>
-                    <td class="cell100 column4">{{v.self_req}}</td>
-                    <td class="cell100 column5">{{v.cat_2_req}}</td>
+                    <td class="cell100 column2">{{ eo.board.cycle_1_total_cme_req }}</td>
+                    <td class="cell100 column3">{{ eo.board.cycle_1_cat_1_req }}</td>
+                    <td class="cell100 column4">{{ eo.board.cycle_1_self_req }}</td>
+                    <td class="cell100 column5">{{ eo.board.cycle_1_cat_2_req }}</td>
                   </tr>
                   {% endfor %}
 
@@ -114,16 +114,16 @@
                     {% csrf_token %}
                     <tr class="row100 body">
                       <td class="cell100 column1">
+                        <select name="board_or_state">
+                          <option value="board">Board</option>
+                          <option value="state">State</option>
+                        </select>
                         <select name="name">
                           {% for k in BOARD_INFO %}
                           <option>{{ k }}</option>
                           {% endfor %}
                         </select>
-                        <select name="timeline">
-                          <option value="cycle_1">Cycle 1</option>
-                          <option value="cycle_2">Cycle 2</option>
-                          <option value="annual">Annual</option>
-                        </select>
+
                         <input
                           type="submit"
                           value="Add"
@@ -137,7 +137,7 @@
               </table>
               <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
               <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-              {% if not True %}
+              {% if is_graph %}
 
               <div id="container" style="width: 50%">
                 <canvas

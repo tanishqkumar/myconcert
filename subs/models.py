@@ -85,7 +85,7 @@ class Board(models.Model):
         null=True,
     )
 
-    cycle_2_cat_2_req = models.IntegerField(
+    cycle_1_cat_2_req = models.IntegerField(
         null=True,
     )
 
@@ -130,12 +130,13 @@ class BoardEntry(models.Model):
     # it is c1, c2, etc
     # start and end date
 
-    entry = models.ManyToManyField(
+    board = models.ForeignKey(
         Board,
+        null=True,
+        on_delete=models.CASCADE,
         related_name="users",
         )
 
-    def __str__(self): return self.name
 
 
 
