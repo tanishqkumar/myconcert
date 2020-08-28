@@ -24,7 +24,6 @@ def chart(request):
                       'cycle_1_self_req', 'cycle_1_cat_2_req']
         row_data = [eo.board.cycle_1_total_cme_req, eo.board.cycle_1_cat_1_req,
                     eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
-    print('row labels then data: ', row_labels, row_data)
     return JsonResponse(data={
         'labels': row_labels,
         'data': row_data,
@@ -38,24 +37,28 @@ def del_board_entry(request):
     print('deleted', request.POST['entry_name'])
     return redirect('boardstate')
 
-# get graph working with current setup
-# modify schema to mimic excel sheet
-# add a couple of items and get graph working
-# write script to scrape excel sheet and get graph working in a basic way
-# take in info about birth/grad date for user at beginning and use that to determine cycle and grad info
-# test persistance and expand journal list for main page/connect to graph db
-# rename url and go live
+# add date fields so user can pick f/l date info and store as part of entry
+# use f/l to determine cycle credits output on graph
+# create state object and populate as counterpoint to ABS
+# implement b/s button st approppriate dropdown shown selectively
+# add f/l etc func to the state template
+# ensure each works fine individually
+# try to add annual tab on graph for each
+# add multiple graph func for multiple rows being added
 
 @login_required()
 def boardstate(request): 
     context = {}
-    context['BOARD_INFO'] = BOARD_INFO
+    # context['BOARD_INFO'] = BOARD_INFO
+    context['board_info'] = Board.objects.all()
     if request.method == 'POST':
         name = request.POST.get('name')
         board = Board.objects.get(name=name)
-        e = BoardEntry(board=board, user=request.user)
+        first_reg = request.POST['first_reg']
+        last_reg = request.POST['last_reg']
+        e = BoardEntry(board=board, user=request.user, first_reg=first_reg, last_reg=last_reg)
         e.save()
-        # post back all the entries, incl. the new one, so they can be the instance of the form
+        # post back all the entries, incl. the new one, so they can be the instance o last_reg form
         board_entries = BoardEntry.objects.filter(user=request.user)
         context['user_board_entries'] = board_entries
         # construct dict with all board entries for this person, and then add k,v within each key

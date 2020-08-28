@@ -110,20 +110,21 @@
                   </tr>
                   {% endfor %}
 
-                  <form method="POST" action="{% url 'boardstate' %}">
+                  <form method="POST" action="{% url 'boardstate' %}" >
                     {% csrf_token %}
-                    <tr class="row100 body">
-                      <td class="cell100 column1">
-                        <select name="board_or_state">
+                    <tr class="row100 body" >
+                      <td class="cell100 column1" >
+                        <select name="board_or_state" >
                           <option value="board">Board</option>
                           <option value="state">State</option>
                         </select>
-                        <select name="name">
-                          {% for k in BOARD_INFO %}
-                          <option>{{ k }}</option>
+                        <select name="name" >
+                          {% for bn in board_info %}
+                          <option>{{ bn }}</option>
                           {% endfor %}
                         </select>
-
+                        <input type="date" name="first_reg">
+                        <input type="date" name="last_reg">
                         <input
                           type="submit"
                           value="Add"

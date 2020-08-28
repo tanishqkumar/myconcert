@@ -126,16 +126,24 @@ class BoardEntry(models.Model):
         related_name="board_entries",
     )
 
-    # we know that a user has an 'ABS' entry, but how do we them know whether
-    # it is c1, c2, etc
-    # start and end date
-
     board = models.ForeignKey(
         Board,
         null=True,
         on_delete=models.CASCADE,
         related_name="users",
         )
+
+    first_reg = models.DateField(
+        null=True,
+         auto_now=False, 
+         auto_now_add=False
+    )
+
+    last_reg = models.DateField(
+        null=True,
+         auto_now=False, 
+         auto_now_add=False
+    )
 
 
 
