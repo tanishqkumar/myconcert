@@ -103,10 +103,17 @@
                         </button>
                       </form>
                     </td>
-                    <td class="cell100 column2">{{ eo.board.cycle_1_total_cme_req }}</td>
-                    <td class="cell100 column3">{{ eo.board.cycle_1_cat_1_req }}</td>
-                    <td class="cell100 column4">{{ eo.board.cycle_1_self_req }}</td>
-                    <td class="cell100 column5">{{ eo.board.cycle_1_cat_2_req }}</td>
+                    {% if eo.timeline_tag == '1' %}
+                        <td class="cell100 column2">{{ eo.board.cycle_1_total_cme_req }}</td>
+                        <td class="cell100 column3">{{ eo.board.cycle_1_cat_1_req }}</td>
+                        <td class="cell100 column4">{{ eo.board.cycle_1_self_req }}</td>
+                        <td class="cell100 column5">{{ eo.board.cycle_1_cat_2_req }}</td>
+                    {% else %}
+                        <td class="cell100 column2">{{ eo.board.cycle_2_total_cme_req }}</td>
+                        <td class="cell100 column3">{{ eo.board.cycle_2_cat_1_req }}</td>
+                        <td class="cell100 column4">{{ eo.board.cycle_2_self_req }}</td>
+                        <td class="cell100 column5">{{ eo.board.cycle_2_cat_2_req }}</td>
+                    {% endif %}
                   </tr>
                   {% endfor %}
 

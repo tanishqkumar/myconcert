@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 import random
+from datetime import date, datetime
 
 # Create your views here.
 @login_required()
@@ -39,6 +40,7 @@ def del_board_entry(request):
 
 # add date fields so user can pick f/l date info and store as part of entry
 # use f/l to determine cycle credits output on graph
+    # if first_reg for board is > board.cycle_1_length, set timeline_tag to 1, else 2
 # create state object and populate as counterpoint to ABS
 # implement b/s button st approppriate dropdown shown selectively
 # add f/l etc func to the state template
@@ -54,30 +56,30 @@ def boardstate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         board = Board.objects.get(name=name)
-        first_reg = request.POST['first_reg']
-        last_reg = request.POST['last_reg']
+        first_reg = datetime.strptime(request.POST['first_reg'], '%Y-%m-%d').date()
+        last_reg = datetime.strptime(
+            request.POST['last_reg'], '%Y-%m-%d').date()
         e = BoardEntry(board=board, user=request.user, first_reg=first_reg, last_reg=last_reg)
         e.save()
-        # post back all the entries, incl. the new one, so they can be the instance o last_reg form
+        # use f/l to determine cycle credits output on graph
+            # if first_reg for board is > board.cycle_1_length, set timeline_tag to 1, else 2
+        
+        if (date.today() - first_reg).days <= (5 * 365):
+            e.timeline_tag = '1'
+            e.save()
+        else: 
+            e.timeline_tag = '2'
+            e.save()
         board_entries = BoardEntry.objects.filter(user=request.user)
         context['user_board_entries'] = board_entries
-        # construct dict with all board entries for this person, and then add k,v within each key
-        # that represent the minor info by querying the board_info here on the backend
         if len(BoardEntry.objects.all()) == 0:
             context['is_graph'] = False
-            # print('graph wont render')
         else:
-            # context['is_graph'] = False
             context['is_graph'] = True
-            # print('graph should render')
         return render(request, 'board.html', context)
     
     else: 
-        print('get req')
-        for x in BoardEntry.objects.all():
-            print(x.board)
         board_entries = BoardEntry.objects.filter(user=request.user)
-        context['board_entries_w_info'] = {}
         context['user_board_entries'] = board_entries
         if len(BoardEntry.objects.all()) == 0:
             context['is_graph'] = False

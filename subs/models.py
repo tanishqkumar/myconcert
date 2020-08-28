@@ -145,6 +145,10 @@ class BoardEntry(models.Model):
          auto_now_add=False
     )
 
+    timeline_tag = models.CharField(
+        null=True,
+        max_length=8
+    )
 
 
 
