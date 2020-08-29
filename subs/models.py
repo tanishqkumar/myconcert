@@ -53,15 +53,71 @@ BOARD_INFO = {
     # 'NY': 5,
 }
 
-# for each board row, need cycle 1, 2 length in y, cats/self, total cme req, as well as f/l certi date
-# ask for first and most recent date of registration for each board to be able to figure out relevant cycle from that
-# maybe keep the current BoardEntry models with the limited details they have, and then just query the spreadsheet
-# objects whenever you need data based on that model information?
-
-
 # Create your models here.
 
+class State(models.Model):
 
+    name = models.CharField(
+        null=True,
+        max_length=1024,
+    )
+
+    cycle_length = models.IntegerField(
+        null=True,
+    )
+
+    cycle_total_cme_req = models.IntegerField(
+        null=True,
+    )
+
+    cycle_cat_1_req = models.IntegerField(
+        null=True,
+    )
+
+    cycle_self_req = models.IntegerField(
+        null=True,
+    )
+
+    cycle_cat_2_req = models.IntegerField(
+        null=True,
+    )
+
+    email = models.EmailField(
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self): return self.name
+
+
+class StateEntry(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="state_entries",
+    )
+
+    state = models.ForeignKey(
+        State,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="users",
+    )
+
+    first_reg = models.DateField(
+        null=True,
+        auto_now=False,
+        auto_now_add=False
+    )
+
+    last_reg = models.DateField(
+        null=True,
+        auto_now=False,
+        auto_now_add=False
+    )
+
+# make 'None' as board and as state (can have no board but many states) with no CME for any board in final upload from spreadsheet
 class Board(models.Model):
 
     name = models.CharField(

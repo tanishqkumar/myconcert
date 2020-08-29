@@ -20,11 +20,20 @@ def chart(request):
     board_entries = BoardEntry.objects.filter(user=request.user)
     rows = {}
     row_labels, row_data = [], []
+    # use python eval function here and in templte to avoid fat if statements
+    
     for eo in board_entries:
-        row_labels = ['cycle_1_total_cme_req', 'cycle_1_cat_1_req',
-                      'cycle_1_self_req', 'cycle_1_cat_2_req']
-        row_data = [eo.board.cycle_1_total_cme_req, eo.board.cycle_1_cat_1_req,
-                    eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
+        if eo.timeline_tag == '1':
+            row_labels = ['cycle_1_cat_1_req',
+                        'cycle_1_self_req', 'cycle_1_cat_2_req']
+            row_data = [eo.board.cycle_1_cat_1_req,
+                        eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
+        else:
+            row_labels = ['cycle_2_cat_1_req',
+                        'cycle_2_self_req', 'cycle_2_cat_2_req']
+            row_data = [eo.board.cycle_2_cat_1_req,
+                        eo.board.cycle_2_self_req, eo.board.cycle_2_cat_2_req]
+            print('row data is', row_data)
     return JsonResponse(data={
         'labels': row_labels,
         'data': row_data,
@@ -38,9 +47,19 @@ def del_board_entry(request):
     print('deleted', request.POST['entry_name'])
     return redirect('boardstate')
 
+
+# @login_required()
+# def del_state_entry(request):
+#     # ABS: 30, where ABS is label and 30 is data
+#     # take the entry name and cycle and we'll get the entry associated with that account
+#     StateEntry.objects.filter(user=request.user, state__name=request.POST['entry_name']).delete()
+#     print('deleted', request.POST['entry_name'])
+#     return redirect('boardstate')
+
 # add date fields so user can pick f/l date info and store as part of entry
 # use f/l to determine cycle credits output on graph
     # if first_reg for board is > board.cycle_1_length, set timeline_tag to 1, else 2
+
 # create state object and populate as counterpoint to ABS
 # implement b/s button st approppriate dropdown shown selectively
 # add f/l etc func to the state template
@@ -63,8 +82,8 @@ def boardstate(request):
         e.save()
         # use f/l to determine cycle credits output on graph
             # if first_reg for board is > board.cycle_1_length, set timeline_tag to 1, else 2
-        
-        if (date.today() - first_reg).days <= (5 * 365):
+        # if within cycle 1, if not, then cycle 2 by default
+        if (date.today() - first_reg).days <= (e.board.cycle_1_length * 365):
             e.timeline_tag = '1'
             e.save()
         else: 
