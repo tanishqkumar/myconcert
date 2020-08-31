@@ -12,33 +12,39 @@ from datetime import date, datetime
 from .utils import *
 
 
+# TODO
+# special cme for state: just one time on first cycle depending on dates?
+# remind me relevance of expiration dates
+# re: annual tab can retrofit
+# is None a board choice or a choice of date entry
+    # don't make date entry compulsory if it's the latter
+ 
 # Create your views here.
 @login_required()
 @csrf_exempt 
 def chart(request):
-    # take in an extra arg about the object ID from ajax and then return row_labels and row_data accordingly
-    print(request.POST['obj_id'])
+    print('obj id is', request.POST['obj_id'])
+    obj_id = request.POST['obj_id']
     context = {}
     board_entries, state_entries = BoardEntry.objects.filter(
         user=request.user), StateEntry.objects.filter(user=request.user)
-    rows = {}
-    row_labels, row_data = [], []
-    # for eo in board_entries:
-    #     if eo.timeline_tag == '1':
-    #         row_labels = ['cycle_1_cat_1_req',
-    #                     'cycle_1_self_req', 'cycle_1_cat_2_req']
-    #         row_data = [eo.board.cycle_1_cat_1_req,
-    #                     eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
-    #     else:
-    #         row_labels = ['cycle_2_cat_1_req',
-    #                     'cycle_2_self_req', 'cycle_2_cat_2_req']
-    #         row_data = [eo.board.cycle_2_cat_1_req,
-    #                     eo.board.cycle_2_self_req, eo.board.cycle_2_cat_2_req]
-            # print('row data is', row_data)
-    for eo in state_entries:
-        row_labels = ['cycle_cat_1_req', 'cycle_cat_2_req']
+    # check each obj id to see which type of obj and then return 2 lists accodingly for that type of object
+    try: 
+        eo = BoardEntry.objects.get(pk=obj_id)
+        if eo.timeline_tag == '1':
+            row_labels = ['Cat I',
+                        'Self', 'Cat II']
+            row_data = [eo.board.cycle_1_cat_1_req,
+                        eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
+        else:
+            row_labels = ['Cat I',
+                        'Self', 'Cat II']
+            row_data = [eo.board.cycle_2_cat_1_req,
+                        eo.board.cycle_2_self_req, eo.board.cycle_2_cat_2_req]
+    except:
+        eo = StateEntry.objects.get(pk=obj_id)
+        row_labels = ['Cat I', 'Cat II']
         row_data = [eo.state.cycle_cat_1_req, eo.state.cycle_cat_2_req]
-        print('row data is', row_data)
     return JsonResponse(data={
         'labels': row_labels,
         'data': row_data,
@@ -46,8 +52,6 @@ def chart(request):
 
 @login_required()
 def del_board_entry(request):
-    # ABS: 30, where ABS is label and 30 is data
-    # take the entry name and cycle and we'll get the entry associated with that account
     BoardEntry.objects.filter(user=request.user, board__name=request.POST['entry_name']).delete()
     print('deleted', request.POST['entry_name'])
     return redirect('boardstate')
@@ -55,8 +59,6 @@ def del_board_entry(request):
 
 @login_required()
 def del_state_entry(request):
-    # ABS: 30, where ABS is label and 30 is data
-    # take the entry name and cycle and we'll get the entry associated with that account
     StateEntry.objects.filter(user=request.user, state__name=request.POST['entry_name']).delete()
     print('deleted', request.POST['entry_name'])
     return redirect('boardstate')
@@ -99,7 +101,7 @@ def boardstate(request):
     board_entries, state_entries = BoardEntry.objects.filter(
         user=request.user), StateEntry.objects.filter(user=request.user)
     context['user_board_entries'], context['user_state_entries'] = board_entries, state_entries
-    context['all_user_entries'] = board_entries + state_entries
+    context['all_user_entries'] = list(board_entries) + list(state_entries)
     # send a combined list for board and state in the order they appear
     # so that you can create many graphs by iterating over that list
     if len(board_entries) == 0 and len(state_entries) == 0:

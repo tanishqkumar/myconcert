@@ -18,33 +18,6 @@ CREDIT_FOR_CHOICES = [
     ('ABMS', 'American Board of Medical Specialties'),
 ]
 
-# BOARD_INFO = {
-#     # each of the rows needs to have its own graph to represent the cat1/self/cat2 reqs (labels and their values are data)
-#     'ABS': {
-#         'site_url': 'http://www.absurgery.org/',
-#         'cycle_1': {
-#             'length_years': 5,
-#             'total_cme_req': 150,
-#             'cat_1_req': 100,
-#             'self_req': 50,
-#             'cat_2_req': 0,
-#         },
-#         'cycle_2': {
-#             'length_years': 5,
-#             'total_cme_req': 125,
-#             'cat_1_req': 125,
-#             'self_req': 0,
-#             'cat_2_req': 0,
-#         },
-#         'annual': {
-#             'total_cme_req': 30,
-#             'cat_1_req': 20,
-#             'self_req': 10,
-#             'cat_2_req': 0,
-#         }
-#     },
-# }
-
 # Create your models here.
 
 class State(models.Model):
@@ -105,7 +78,8 @@ class StateEntry(models.Model):
         auto_now_add=False
     )
 
-# make 'None' as board and as state (can have no board but many states) with no CME for any board in final upload from spreadsheet
+    def __str__(self): return self.state.name
+
 class Board(models.Model):
 
     name = models.CharField(
@@ -193,6 +167,9 @@ class BoardEntry(models.Model):
         null=True,
         max_length=8
     )
+
+    def __str__(self): 
+        return self.board.name
 
 
 

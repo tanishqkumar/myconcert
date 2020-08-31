@@ -164,22 +164,23 @@
               </table>
               <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
               <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-              {% if is_graph %} {% for entry in all_user_entries %}
-
+              
+              {% if is_graph %} 
+              {% for entry in all_user_entries %}
               <div id="container" style="width: 50%">
                 <canvas
-                  class="chart"
-                  data-url="{% url 'chart' %}"
-                  style="margin-top: 30px; margin-left: 50%"
+                class="chart-{{entry.id}}"
+                data-url="{% url 'chart' %}"
+                style="margin-top: 30px; margin-left: 50%"
                 ></canvas>
               </div>
-
+              
               <script>
                 $(function () {
-                  var $chart = $(".chart");
+                  var $chart = $(".chart-{{entry.id}}");
                   // get object id here
                   var obj_id = "{{ entry.id }}"
-                  console.log('url is:', $chart.data("url"))
+                  console.log('url is:', $chart.data("url"));
                   $.ajax({
                     url: $chart.data("url"),
                     data: {
@@ -188,7 +189,8 @@
                     dataType: 'json',
                     type: 'POST',
                     success: function (data) {
-                      console.log('yoo', obj_id);
+                      console.log('successfully got data for', obj_id);
+                      console.log('which is', data.data);
                       var ctx = $chart[0].getContext("2d");
 
                       new Chart(ctx, {
@@ -216,11 +218,8 @@
                         options: {
                           responsive: true,
                           cutoutPercentage: 70,
-                          // legend: {
-                          //   position: "left",
-                          // },
                           title: {
-                            text: "Your CME, Visualized",
+                            text: "{{ entry }}",
                             fontSize: 16,
                             display: true,
                           },
@@ -230,9 +229,113 @@
                   });
                 });
               </script>
-
-              <br />
+              {% endfor %}
+              <br>
               {% endif %}
+              
+
+              {% comment %}
+
+              <div id="container" style="width: 50%">
+                <canvas
+                class="chart"
+                data-url="{% url 'chart' %}"
+                style="margin-top: 30px; margin-left: 50%"
+                ></canvas>
+              </div>
+
+              <script>
+                      console.log('got a graph');
+                $(function () {
+                      var $chart = $(".chart");
+                      var ctx = $chart[0].getContext("2d");
+
+                      new Chart(ctx, {
+                        type: "doughnut",
+                        data: {
+                          labels: ['dig', 'bick'],
+                          datasets: [
+                            {
+                              backgroundColor: [
+                                "#f38b4a",
+                                "#56d798",
+                                "#ff8397",
+                                "#6970d5",
+                              ],
+                              hoverBackgroundColor: [
+                                "#f38b4a",
+                                "#56d798",
+                                "#ff8397",
+                                "#6970d5",
+                              ],
+                              data: [14, 28],
+                            },
+                          ],
+                        },
+                        options: {
+                          responsive: true,
+                          cutoutPercentage: 70,
+                          title: {
+                            text: "example graph 1",
+                            fontSize: 16,
+                            display: true,
+                          },
+                        },
+                      });
+                    })
+              </script>
+
+              <div id="container" style="width: 50%">
+                <canvas
+                class="chart-2"
+                data-url="{% url 'chart' %}"
+                style="margin-top: 30px; margin-left: 50%"
+                ></canvas>
+              </div>
+
+              <script>
+                      console.log('got another graph');
+                $(function () {
+                      var $chart = $(".chart-2");
+                      var ctx = $chart[0].getContext("2d");
+
+                      new Chart(ctx, {
+                        type: "doughnut",
+                        data: {
+                          labels: ['diggy', 'bicyk'],
+                          datasets: [
+                            {
+                              backgroundColor: [
+                                "#f38b4a",
+                                "#56d798",
+                                "#ff8397",
+                                "#6970d5",
+                              ],
+                              hoverBackgroundColor: [
+                                "#f38b4a",
+                                "#56d798",
+                                "#ff8397",
+                                "#6970d5",
+                              ],
+                              data: [15, 38],
+                            },
+                          ],
+                        },
+                        options: {
+                          responsive: true,
+                          cutoutPercentage: 70,
+                          title: {
+                            text: "example graph 2",
+                            fontSize: 16,
+                            display: true,
+                          },
+                        },
+                      });
+                    })
+              </script>
+
+{% endcomment %}
+
             </div>
           </div>
         </div>
