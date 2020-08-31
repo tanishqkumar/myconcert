@@ -74,10 +74,6 @@ class State(models.Model):
         null=True,
     )
 
-    cycle_self_req = models.IntegerField(
-        null=True,
-    )
-
     cycle_cat_2_req = models.IntegerField(
         null=True,
     )

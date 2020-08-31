@@ -9,31 +9,40 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
 import random
 from datetime import date, datetime
+from .utils import *
+
 
 # Create your views here.
 @login_required()
 @csrf_exempt 
 def chart(request):
-    # return list of lists, first list is row (eg ABS), and nested list is total, cat1, cat2, self as labels and corresponding split
-    # from the board_dict is the list for data
+    # take in an extra arg about the object ID from ajax and then return row_labels and row_data accordingly
     context = {}
-    board_entries = BoardEntry.objects.filter(user=request.user)
+    board_entries, state_entries = BoardEntry.objects.filter(
+        user=request.user), StateEntry.objects.filter(user=request.user)
     rows = {}
     row_labels, row_data = [], []
-    # use python eval function here and in templte to avoid fat if statements
-    
-    for eo in board_entries:
-        if eo.timeline_tag == '1':
-            row_labels = ['cycle_1_cat_1_req',
-                        'cycle_1_self_req', 'cycle_1_cat_2_req']
-            row_data = [eo.board.cycle_1_cat_1_req,
-                        eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
-        else:
-            row_labels = ['cycle_2_cat_1_req',
-                        'cycle_2_self_req', 'cycle_2_cat_2_req']
-            row_data = [eo.board.cycle_2_cat_1_req,
-                        eo.board.cycle_2_self_req, eo.board.cycle_2_cat_2_req]
-            print('row data is', row_data)
+    print('charted')
+    # make a list of all StateEntry/BoardEntry objects and if an individual obj is BoardEntry
+    # then do below, and else if it's StateEntry then the labels/data are different since there are not multiple cycles
+    # so that the object you pass in is a nested list with all row_data within it that you can just iterate through on the front-end
+    # and show each meta_row_data.2 within a {{ for }} loop
+    # for eo in board_entries:
+    #     if eo.timeline_tag == '1':
+    #         row_labels = ['cycle_1_cat_1_req',
+    #                     'cycle_1_self_req', 'cycle_1_cat_2_req']
+    #         row_data = [eo.board.cycle_1_cat_1_req,
+    #                     eo.board.cycle_1_self_req, eo.board.cycle_1_cat_2_req]
+    #     else:
+    #         row_labels = ['cycle_2_cat_1_req',
+    #                     'cycle_2_self_req', 'cycle_2_cat_2_req']
+    #         row_data = [eo.board.cycle_2_cat_1_req,
+    #                     eo.board.cycle_2_self_req, eo.board.cycle_2_cat_2_req]
+            # print('row data is', row_data)
+    for eo in state_entries:
+        row_labels = ['cycle_cat_1_req', 'cycle_cat_2_req']
+        row_data = [eo.state.cycle_cat_1_req, eo.state.cycle_cat_2_req]
+        print('row data is', row_data)
     return JsonResponse(data={
         'labels': row_labels,
         'data': row_data,
@@ -48,64 +57,58 @@ def del_board_entry(request):
     return redirect('boardstate')
 
 
-# @login_required()
-# def del_state_entry(request):
-#     # ABS: 30, where ABS is label and 30 is data
-#     # take the entry name and cycle and we'll get the entry associated with that account
-#     StateEntry.objects.filter(user=request.user, state__name=request.POST['entry_name']).delete()
-#     print('deleted', request.POST['entry_name'])
-#     return redirect('boardstate')
+@login_required()
+def del_state_entry(request):
+    # ABS: 30, where ABS is label and 30 is data
+    # take the entry name and cycle and we'll get the entry associated with that account
+    StateEntry.objects.filter(user=request.user, state__name=request.POST['entry_name']).delete()
+    print('deleted', request.POST['entry_name'])
+    return redirect('boardstate')
 
 # add date fields so user can pick f/l date info and store as part of entry
 # use f/l to determine cycle credits output on graph
     # if first_reg for board is > board.cycle_1_length, set timeline_tag to 1, else 2
-
 # create state object and populate as counterpoint to ABS
 # implement b/s button st approppriate dropdown shown selectively
 # add f/l etc func to the state template
+# --- --- --- --- --- --- --- --- ---
 # ensure each works fine individually
 # try to add annual tab on graph for each
 # add multiple graph func for multiple rows being added
 
 @login_required()
-def boardstate(request): 
+def boardstate(request):
     context = {}
-    # context['BOARD_INFO'] = BOARD_INFO
     context['board_info'] = Board.objects.all()
+    context['state_info'] = State.objects.all()
     if request.method == 'POST':
         name = request.POST.get('name')
-        board = Board.objects.get(name=name)
-        first_reg = datetime.strptime(request.POST['first_reg'], '%Y-%m-%d').date()
+        first_reg = datetime.strptime(
+            request.POST['first_reg'], '%Y-%m-%d').date()
         last_reg = datetime.strptime(
             request.POST['last_reg'], '%Y-%m-%d').date()
-        e = BoardEntry(board=board, user=request.user, first_reg=first_reg, last_reg=last_reg)
-        e.save()
-        # use f/l to determine cycle credits output on graph
-            # if first_reg for board is > board.cycle_1_length, set timeline_tag to 1, else 2
-        # if within cycle 1, if not, then cycle 2 by default
-        if (date.today() - first_reg).days <= (e.board.cycle_1_length * 365):
-            e.timeline_tag = '1'
-            e.save()
-        else: 
-            e.timeline_tag = '2'
-            e.save()
-        board_entries = BoardEntry.objects.filter(user=request.user)
-        context['user_board_entries'] = board_entries
-        if len(BoardEntry.objects.all()) == 0:
-            context['is_graph'] = False
-        else:
-            context['is_graph'] = True
-        return render(request, 'board.html', context)
-    
-    else: 
-        board_entries = BoardEntry.objects.filter(user=request.user)
-        context['user_board_entries'] = board_entries
-        if len(BoardEntry.objects.all()) == 0:
-            context['is_graph'] = False
-        else:     
-            context['is_graph'] = True
-        return render(request, 'board.html', context)
-    return render(request, 'state.html')
+        try:
+            board = Board.objects.get(name=name)
+            print('board shit')
+            b = BoardEntry(board=board, user=request.user,
+                           first_reg=first_reg, last_reg=last_reg)
+            b.save()
+            AssignBoardTimelineTags(request, b, first_reg)
+        except:
+            state = State.objects.get(name=name)
+            print('state shit')
+            s = StateEntry(state=state, user=request.user,
+                           first_reg=first_reg, last_reg=last_reg)
+            s.save()
+            print('all state entries are', StateEntry.objects.all())
+    board_entries, state_entries = BoardEntry.objects.filter(
+        user=request.user), StateEntry.objects.filter(user=request.user)
+    context['user_board_entries'], context['user_state_entries'] = board_entries, state_entries
+    if len(board_entries) == 0 and len(state_entries) == 0:
+        context['is_graph'] = False
+    else:
+        context['is_graph'] = True
+    return render(request, 'board.html', context)
 
 
 

@@ -52,15 +52,6 @@
   />
   <!--===============================================================================================-->
   <!-- this is to make sure that the user enters a string before searching -->
-  <script type="text/javascript">
-    function validateForm() {
-      var txt = document.getElementsByName("name")[0].value;
-      if (txt == "") {
-        alert("Please enter text to search for.");
-        return false;
-      }
-    }
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 </head>
 <body>
@@ -71,7 +62,7 @@
           <div class="wrap-table100">
             <div class="table100-nextcols">
               <table>
-                <thead>
+                <head>
                   <tr class="row100 head">
                     <th class="cell100 column1">Name</th>
                     <th class="cell100 column2">CME Credits</th>
@@ -79,8 +70,8 @@
                     <th class="cell100 column4">self</th>
                     <th class="cell100 column5">cat-2</th>
                   </tr>
-                </thead>
-                <tbody>
+                </head>
+                <body>
                   <!-- show all existing entries here before the empty one below -->
                   {% for eo in user_board_entries %}
                   <tr class="row100 body">
@@ -116,19 +107,47 @@
                     {% endif %}
                   </tr>
                   {% endfor %}
+                  {% for eo in user_state_entries %}
+                                    <tr class="row100 body">
+                    <td class="cell100 column1">
+                      {{ eo.state.name }}
+                      <form method="POST" action="{% url 'del_state_entry' %}">
+                        {% csrf_token %}
+                        <button
+                          type="submit"
+                          name="entry_name"
+                          value="{{ eo.state.name }}"
+                          class="btn btn-primary"
+                          style="
+                            display: inline;
+                            margin-left: 20px;
+                            line-height: 0.5;
+                          "
+                        >
+                          Delete
+                        </button>
+                      </form>
+                    </td>
+                        <td class="cell100 column2">{{ eo.state.cycle_total_cme_req }}</td>
+                        <td class="cell100 column3">{{ eo.state.cycle_cat_1_req }}</td>
+                        <td class="cell100 column5">{{ eo.state.cycle_cat_2_req }}</td>
+                  </tr>
+                  {% endfor %}
 
                   <form method="POST" action="{% url 'boardstate' %}" >
                     {% csrf_token %}
                     <tr class="row100 body" >
                       <td class="cell100 column1" >
-                        <select name="board_or_state" >
-                          <option value="board">Board</option>
-                          <option value="state">State</option>
-                        </select>
                         <select name="name" >
                           {% for bn in board_info %}
                           <option>{{ bn }}</option>
                           {% endfor %}
+                          <option>-- -- --</option>
+                          {% for sn in state_info %}
+                          <option>{{ sn }}</option>
+                          {% endfor %}
+                          <option>-- -- --</option>
+                          <option>None</option>
                         </select>
                         <input type="date" name="first_reg">
                         <input type="date" name="last_reg">
@@ -141,7 +160,7 @@
                       </td>
                     </tr>
                   </form>
-                </tbody>
+                </body>
               </table>
               <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
               <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
@@ -158,12 +177,17 @@
               <script>
                 $(function () {
                   var $chart = $(".chart");
+                  // get object id here
+                  var obj_id = "{{ user_state_entries|safe }}"
                   console.log('url is:', $chart.data("url"))
                   $.ajax({
                     url: $chart.data("url"),
+                    data: {
+                    'obj_id': obj_id,
+                  },
+                    dataType: 'json',
                     success: function (data) {
-                      console.log('yoo')
-                      // console.log(data)
+                      console.log('yoo', obj_id),
                       var ctx = $chart[0].getContext("2d");
 
                       new Chart(ctx, {

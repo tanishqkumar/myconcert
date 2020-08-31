@@ -20,6 +20,7 @@ urlpatterns = [
     path('boardstate', boardstate, name='boardstate'), 
     path('chart', chart, name='chart'), 
     path('del_board_entry', del_board_entry, name='del_board_entry'), 
+    path('del_state_entry', del_state_entry, name='del_state_entry'), 
 ]
 
 
