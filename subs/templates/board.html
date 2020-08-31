@@ -164,7 +164,7 @@
               </table>
               <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
               <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-              {% if is_graph %}
+              {% if is_graph %} {% for entry in all_user_entries %}
 
               <div id="container" style="width: 50%">
                 <canvas
@@ -178,7 +178,7 @@
                 $(function () {
                   var $chart = $(".chart");
                   // get object id here
-                  var obj_id = "{{ user_state_entries|safe }}"
+                  var obj_id = "{{ entry.id }}"
                   console.log('url is:', $chart.data("url"))
                   $.ajax({
                     url: $chart.data("url"),
@@ -186,8 +186,9 @@
                     'obj_id': obj_id,
                   },
                     dataType: 'json',
+                    type: 'POST',
                     success: function (data) {
-                      console.log('yoo', obj_id),
+                      console.log('yoo', obj_id);
                       var ctx = $chart[0].getContext("2d");
 
                       new Chart(ctx, {
@@ -220,7 +221,7 @@
                           // },
                           title: {
                             text: "Your CME, Visualized",
-                            fontSize: 32,
+                            fontSize: 16,
                             display: true,
                           },
                         },

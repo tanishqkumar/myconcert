@@ -18,40 +18,32 @@ CREDIT_FOR_CHOICES = [
     ('ABMS', 'American Board of Medical Specialties'),
 ]
 
-BOARD_INFO = {
-    # each of the rows needs to have its own graph to represent the cat1/self/cat2 reqs (labels and their values are data)
-    'ABS': {
-        'site_url': 'http://www.absurgery.org/',
-        'cycle_1': {
-            'length_years': 5,
-            'total_cme_req': 150,
-            'cat_1_req': 100,
-            'self_req': 50,
-            'cat_2_req': 0,
-        },
-        'cycle_2': {
-            'length_years': 5,
-            'total_cme_req': 125,
-            'cat_1_req': 125,
-            'self_req': 0,
-            'cat_2_req': 0,
-        },
-        'annual': {
-            'total_cme_req': 30,
-            'cat_1_req': 20,
-            'self_req': 10,
-            'cat_2_req': 0,
-        }
-    },
-    # generate big JSON from xcel 
-    # big db write columns by hand and then just scrape values into db
-    # write a mapping for the columns and use those as model fields
-    # potentially just paste this into front-end JS
-    # 'ABS': 30,
-    # 'AMBS': 25,
-    # 'NBPAS': 20,
-    # 'NY': 5,
-}
+# BOARD_INFO = {
+#     # each of the rows needs to have its own graph to represent the cat1/self/cat2 reqs (labels and their values are data)
+#     'ABS': {
+#         'site_url': 'http://www.absurgery.org/',
+#         'cycle_1': {
+#             'length_years': 5,
+#             'total_cme_req': 150,
+#             'cat_1_req': 100,
+#             'self_req': 50,
+#             'cat_2_req': 0,
+#         },
+#         'cycle_2': {
+#             'length_years': 5,
+#             'total_cme_req': 125,
+#             'cat_1_req': 125,
+#             'self_req': 0,
+#             'cat_2_req': 0,
+#         },
+#         'annual': {
+#             'total_cme_req': 30,
+#             'cat_1_req': 20,
+#             'self_req': 10,
+#             'cat_2_req': 0,
+#         }
+#     },
+# }
 
 # Create your models here.
 

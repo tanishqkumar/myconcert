@@ -17,16 +17,12 @@ from .utils import *
 @csrf_exempt 
 def chart(request):
     # take in an extra arg about the object ID from ajax and then return row_labels and row_data accordingly
+    print(request.POST['obj_id'])
     context = {}
     board_entries, state_entries = BoardEntry.objects.filter(
         user=request.user), StateEntry.objects.filter(user=request.user)
     rows = {}
     row_labels, row_data = [], []
-    print('charted')
-    # make a list of all StateEntry/BoardEntry objects and if an individual obj is BoardEntry
-    # then do below, and else if it's StateEntry then the labels/data are different since there are not multiple cycles
-    # so that the object you pass in is a nested list with all row_data within it that you can just iterate through on the front-end
-    # and show each meta_row_data.2 within a {{ for }} loop
     # for eo in board_entries:
     #     if eo.timeline_tag == '1':
     #         row_labels = ['cycle_1_cat_1_req',
@@ -71,7 +67,6 @@ def del_state_entry(request):
 # create state object and populate as counterpoint to ABS
 # implement b/s button st approppriate dropdown shown selectively
 # add f/l etc func to the state template
-# --- --- --- --- --- --- --- --- ---
 # ensure each works fine individually
 # try to add annual tab on graph for each
 # add multiple graph func for multiple rows being added
@@ -104,6 +99,9 @@ def boardstate(request):
     board_entries, state_entries = BoardEntry.objects.filter(
         user=request.user), StateEntry.objects.filter(user=request.user)
     context['user_board_entries'], context['user_state_entries'] = board_entries, state_entries
+    context['all_user_entries'] = board_entries + state_entries
+    # send a combined list for board and state in the order they appear
+    # so that you can create many graphs by iterating over that list
     if len(board_entries) == 0 and len(state_entries) == 0:
         context['is_graph'] = False
     else:
