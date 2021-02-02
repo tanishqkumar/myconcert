@@ -9,7 +9,7 @@ Babel==2.7.0
 backcall==0.1.0
 beautifulsoup4==4.7.1
 billiard==3.6.1.0
-bleach==2.1.4
+bleach==3.3.0
 boto3==1.4.4
 botocore==1.5.45
 braintree==3.49.0
