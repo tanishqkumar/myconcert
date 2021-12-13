@@ -114,7 +114,7 @@ lazy-object-proxy==1.4.3
 leveldb==0.20
 leven==1.0.4
 libmagic==1.0
-lxml==4.5.0
+lxml==4.6.5
 Markdown==3.2.1
 MarkupSafe==0.23
 matplotlib==3.2.0
